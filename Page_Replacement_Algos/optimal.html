@@ -1,0 +1,116 @@
+<html>  
+<head>  
+</head>  
+<body>  
+<p>Optimal</p> 
+<body> 
+    <label for="no_of_frames">Enter number of frames </label>
+    <input type="text" id="no_of_frames" name="no_of_frames"><br><br>
+
+    <label for="no_of_pages">Enter number of pages </label>
+    <input type="text" id="no_of_pages" name="no_of_pages"><br><br>
+
+    <label for="pageString">Enter page replacement string </label>
+    <input type="text" id="pageString" name="pageString"><br><br>
+
+    <input type="button" value="Submit" onclick="optimal()">
+</body>  
+</html>  
+
+<script>
+
+function optimal()
+{
+    var frames = document.getElementById('no_of_frames').value;
+    var pages = document.getElementById('no_of_pages').value;
+    var pageString = document.getElementById('pageString').value;
+    
+    var occupied = new Array(frames);
+    var currentIndex = -1, fifoIndex = -1;
+    //init occupied
+
+    frames = parseInt(frames);
+    pages = parseInt(pages);
+    
+    for(var i=0; i<frames; i++)
+    {
+        occupied[i] = -1;
+    }
+
+    var hit = 0;
+    for(var i=0; i<pages; i++)
+    {
+        //check if hit
+        var flag = 0;
+        for(var j=0; j<currentIndex + 1; j++)
+        {
+            if(occupied[j] === parseInt(pageString[2*i]))
+            {
+                //alert(i + ", " + pageString[2*i]);
+                flag = 1;
+                break;
+            }
+        }
+
+        if(flag)
+        {
+            hit += 1;
+            continue;
+        }
+        else if(currentIndex === frames - 1)
+        {
+            var useTimes = new Array(frames);
+
+            for(var j=0; j<frames; j++)
+                useTimes[j] = 100000;
+
+            for(var j=0; j<frames; j++)
+            {
+                for(var k=i+1; k<pages; k++)
+                {
+                    if(parseInt(pageString[2*k]) === occupied[j])
+                    {
+                        if(k < useTimes[j])
+                        {
+                            useTimes[j] = k; //index at which it is used
+                        }
+                    }
+                }
+            }
+
+            
+            for(var j=0; j<frames; j++)
+            {
+                if(useTimes[j] === 100000)
+                {
+                    useTimes[j] = -1;
+                }
+            }
+
+            //find lru
+            var optimalIndex = 0;
+            
+            for(var j=1; j<frames; j++)
+            {
+                if(useTimes[j] > useTimes[optimalIndex])
+                    optimalIndex = j;
+                else if(useTimes[j] === -1)
+                {   
+                    optimalIndex = j;
+                    break;
+                }
+            }
+
+            if(useTimes[0] == -1)
+                optimalIndex = 0;
+
+            occupied[optimalIndex] = parseInt(pageString[2*i]);
+            continue;
+        }
+        currentIndex += 1;
+        occupied[currentIndex] = parseInt(pageString[2*i]);
+    }
+
+    alert("Hits = " + hit);
+}
+</script>
