@@ -15,6 +15,7 @@
 
     <input type="button" value="Submit" onclick="optimal()">
 </body>  
+<p id="result"></p>
 </html>  
 
 <script>
@@ -111,6 +112,6 @@ function optimal()
         occupied[currentIndex] = parseInt(pageString[2*i]);
     }
 
-    alert("Hits = " + hit);
+    document.getElementById("result").innerHTML = "Number of hits = " + hit;
 }
 </script>
