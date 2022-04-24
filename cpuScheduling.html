@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CPU Scheduling</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.6/fullpage.min.css"
+      integrity="sha512-s+AVc8nCwxyMbLdydJ5BVLf6M9KxTL5g271B07VbqqyzO0hODSStcAV2dJDDrG1Rw627pAnY3hbhsuaF8CLYrg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        font-family: Georgia, "Times New Roman", Times, serif;
+      }
+      #header {
+        background: url("bg.webp") no-repeat;
+        background-size: cover;
+        text-align: center;
+        font-size: 7rem;
+        text-shadow: 0 0 5px black;
+        color: white;
+      }
+      .s1 {
+        background-color: #1b4d68;
+        z-index: -1;
+      }
+      #title {
+        font-size: 3rem;
+        text-shadow: 0 0 4px black;
+        color: white;
+        text-align: center;
+      }
+      #info {
+        font-size: 1.4rem;
+        max-width: 60%;
+        margin: 3rem auto;
+        color: white;
+        line-height: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="fullpage">
+      <div class="section" id="header">CPU Scheduling</div>
+      <div class="section s1">
+        <div class="slide">
+          <div id="title">FCFS Scheduling</div>
+          <div id="info">
+            First Come First Serve (FCFS) is an operating system scheduling
+            algorithm that automatically executes queued requests and processes
+            in order of their arrival. It is the easiest and simplest CPU
+            scheduling algorithm. In this type of algorithm, processes which
+            requests the CPU first get the CPU allocation first. This is managed
+            with a FIFO queue. The full form of FCFS is First Come First Serve.
+            <br />
+            <br />
+            As the process enters the ready queue, its PCB (Process Control
+            Block) is linked with the tail of the queue and, when the CPU
+            becomes free, it should be assigned to the process at the beginning
+            of the queue. <br />
+          </div>
+        </div>
+        <div class="slide">
+          <div id="title">Shortest Job First Scheduling</div>
+          <div id="info">
+            Shortest Job First (SJF) is an algorithm in which the process having
+            the smallest execution time is chosen for the next execution. This
+            scheduling method can be preemptive or non-preemptive. It
+            significantly reduces the average waiting time for other processes
+            awaiting execution. The full form of SJF is Shortest Job First.
+            <div class="subbutton">Submit</div>
+          </div>
+        </div>
+        <div class="slide">
+          <div id="title">Round Robin Scheduling</div>
+          <div id="info">
+            The name of this algorithm comes from the round-robin principle,
+            where each person gets an equal share of something in turns. It is
+            the oldest, simplest scheduling algorithm, which is mostly used for
+            multitasking. <br />
+            <br />
+            In Round-robin scheduling, each ready task runs turn by turn only in
+            a cyclic queue for a limited time slice. This algorithm also offers
+            starvation free execution of processes.
+          </div>
+        </div>
+        <div class="slide">
+          <div id="title">Priority Scheduling</div>
+          <div id="info">
+            Priority Scheduling is a method of scheduling processes that is
+            based on priority. In this algorithm, the scheduler selects the
+            tasks to work as per the priority.
+            <br /><br />
+            The processes with higher priority should be carried out first,
+            whereas jobs with equal priorities are carried out on a round-robin
+            or FCFS basis. Priority depends upon memory requirements, time
+            requirements, etc.
+          </div>
+        </div>
+      </div>
+      <div class="section">Section 3</div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.6/fullpage.min.js"
+      integrity="sha512-vjwl0AxwZ7l1S3ACSrgSMF6PEoDGz99WkZwGasqax6g5K1SQ5BznyqoHxZ01RF7pxShcXZ9WedS2+bkHC8uovw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      new fullpage("#fullpage", {});
+    </script>
+  </body>
+</html>
