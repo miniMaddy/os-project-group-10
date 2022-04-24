@@ -1,28 +1,74 @@
 <html>  
 <head>  
+
 </head>  
-<body>  
-<p>FIFO</p> 
-<body> 
+
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: 100px;
+    font-size: 20px;
+  }
+  table, th, td {
+      text-align: center;
+      border: 1px solid black;
+      border-collapse: collapse;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+</style>
+
+<body>
+  <h1 style="color: rgb(3, 3, 14); text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 35px;">Page Replacement Algorithms</h1>
+
+  <h1 style="color: rgb(3, 3, 14); text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; font-size: 30px;">FIFO</h1>
+
+  <br>
     <label for="no_of_frames">Enter number of frames </label>
     <input type="text" id="no_of_frames" name="no_of_frames"><br><br>
 
     <label for="no_of_pages">Enter number of pages </label>
     <input type="text" id="no_of_pages" name="no_of_pages"><br><br>
 
-    <label for="pageString">Enter page replacement string </label>
+    <label for="pageString">Enter page reference string </label>
     <input type="text" id="pageString" name="pageString"><br><br>
 
-    <input type="button" value="Submit" onclick="fifo()">
-</body>  
 
+    <input type="button" style="position:absolute; width:80px; top:500px; left:300px; height: 25px; width: 100px;" value="Go" onclick="createTable(); fifo()">
+
+    <table id="output" style="position:absolute; width: 600px; top:450px; left:500px; font-size: medium; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;">
+      <thead>
+      <tr style="text-align: center; background-color: #D7E5F0;">
+        <th style="width: 200px;">Page</th>     
+        <th style="width: 200px;" id="header">Frames</th>
+        <th style="width: 200px;">Result</th>
+      </tr>
+    </thead>  
+      <tbody>
+      </tbody>
+    </table>
+ 
 <p id="result"></p>
+</body>  
 </html>  
 
 <script>
 
+function createTable()
+{
+  var frames = document.getElementById('no_of_frames').value;
+  document.getElementById("header").colSpan = frames.toString();
+}
+
 function fifo()
 {
+    var tableLength = document.getElementById("output").getElementsByTagName('tbody')[0].rows.length; 
+
+    if(tableLength > 1)
+    {   
+      var bodyRef = document.getElementById("output").getElementsByTagName('tbody')[0];
+      bodyRef.innerHTML = '';
+    }
+
     var frames = document.getElementById('no_of_frames').value;
     var pages = document.getElementById('no_of_pages').value;
     var pageString = document.getElementById('pageString').value;
@@ -33,16 +79,18 @@ function fifo()
 
     frames = parseInt(frames);
     pages = parseInt(pages);
-    
+
     for(var i=0; i<frames; i++)
     {
         occupied[i] = -1;
     }
 
+    var hitMissCell;
     var hit = 0;
     for(let i=0; i<pages; i++)
     {
         //check if hit
+        hitMissCell = 0;
         var flag = 0;
         for(let j=0; j<currentIndex + 1; j++)
         {
@@ -56,17 +104,48 @@ function fifo()
         if(flag)
         {
             hit += 1;
-            continue;
+            hitMissCell = 1;
         }
         else if(currentIndex === frames-1) //all frames full
         {
             fifoIndex += 1;
             fifoIndex %= frames;
             occupied[fifoIndex] = parseInt(pageString[2*i]);
-            continue;
         }
-        currentIndex += 1;
-        occupied[currentIndex] = parseInt(pageString[2*i]); 
+        else
+        {
+          currentIndex += 1;
+          occupied[currentIndex] = parseInt(pageString[2*i]);
+        }
+        var table = document.getElementById("output").getElementsByTagName('tbody')[0];
+        var row = table.insertRow();
+
+        var c0 = document.createElement('td');
+        c0.style.width = '50px';
+        c0.innerHTML = pageString[2*i];
+        row.append(c0);
+
+        for(var j=0; j<frames; j++)
+        {
+          var c0 = document.createElement('td');
+          c0.style.width = '50px';
+          if(j <= currentIndex)
+            c0.innerHTML = occupied[j];
+          row.appendChild(c0);
+        }
+
+        var c0 = document.createElement('td');
+        c0.style.width = '50px';
+
+        if(hitMissCell)
+        {
+          c0.innerHTML = "Hit";
+          row.style.backgroundColor = "#A6ECA8";
+        }
+        else
+          c0.innerHTML = "Fault";
+        row.appendChild(c0);
+
     }
 
     document.getElementById("result").innerHTML = "Number of hits = " + hit;
