@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+	  <link href="css/css_prod_cons.css" rel="stylesheet" />
+	  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	  <title>Producer Consumer Problem</title>
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" type="text/css" href="../Index/css/bootswatch.css" />
+      <script type="text/javascript" src="../Index/js/scrolloverflow.js"></script>
+
+      <script type="text/javascript" src="../Index/js/jquery.fullPage.js"></script>
+      <script type="text/javascript">
+    	$(document).ready(function() {
+    		$('#fullpage').fullpage({
+    			sectionsColor: ['#00000'],
+    			anchors: ['anime'],
+    			menu: '#menu',
+    			easingcss3: 'cubic-bezier(0.175, 0.885, 0.320, 1.275)'
+    		});
+    	});
+      </script>
+</head>
+
+<body
+    <div id="fullpage">
+		<div class="section " id="section0">
+			<div class="container">
+		        <div class="jumbotron">
+		            <h1 class="display-3">Simulation of Producer-Consumer Problem</h1>
+		            <p class="lead">A multi-process synchronization problem</p>
+		            <hr class="my-4">
+		            <p>There is a buffer of n slots and each slot is capable of storing one unit of data. There are two processes running, namely, producer and consumer, which are operating on the buffer. A producer tries to insert data into an empty slot of the buffer. A consumer tries to remove data from a filled slot in the buffer.</p>
+		            <p class="lead">
+		              <a class="btn btn-success" href="#" role="button">Wiki</a>
+		            </p>
+		            <p class="lead">
+		              <a class="btn btn-success" href="producer_consumer.html#anim" role="button">Play</a>
+		            </p>
+		        </div>
+	        <br>
+	    	</div>
+		</div>
+
+	    <div class="section" id="section1">
+	    	<div class="container" id="anim">
+				<input type="image" src="includes/play.png" class="play1" onclick="producer(this);"/>
+				<img id="prod" src="includes/producer.png" >
+				<img id="producer" src="includes/prod.png">
+				<div class="buffer">Buffer size : 8</div>
+				<div id="count">Counter : 0</div>
+				<input type="image" src="includes/play.png" class="play2" onclick="consumer(this);"/>
+				<img id="cons" src="includes/consumer.png" >
+				<img id="consumer" src="includes/cons.png">
+				<div id="bufferList">
+					<img id="empty1" src="includes/empty.png">
+					<img id="empty2" src="includes/empty.png">
+					<img id="empty3" src="includes/empty.png">
+					<img id="empty4" src="includes/empty.png">
+					<img id="empty5" src="includes/empty.png">
+					<img id="empty6" src="includes/empty.png">
+					<img id="empty7" src="includes/empty.png">
+					<img id="empty8" src="includes/empty.png">
+				</div>
+			</div>
+		</div>
+</div>
+
+</body>
+
+<script>
+
+	var start=0, end=0, count=0;
+	var interval1, interval2;
+	function producer(el){
+	if(count==8)
+	{
+		alert("Produce limit is reached");
+	} else {
+		if(el.className!="pause1")
+		{
+			el.src="includes/pause.png";
+			el.className="pause1";
+			document.getElementById("prod").src="includes/moneyaway.gif";
+			interval1 = setInterval(function(){
+				if (count == 8) {
+					clearInterval(interval1);
+					alert("Produce limit reached");
+					return;
+				}
+				if(el.className!="play1") {
+				str="empty"+(end+1);
+				count++;
+				document.getElementById(str).src="includes/money.jpg";
+				document.getElementById("count").innerHTML = "Counter : "+count;
+				end = (end+1)%8;
+				if(count==8)
+				{
+					el.src='includes/play.png';
+					el.className="play1";
+					document.getElementById("prod").src="includes/producer.png";
+					start = 0;
+					end = 0;
+				}
+				}
+			},1000);
+		}
+		else if(el.className=="pause1")
+		{
+			el.src='includes/play.png';
+			el.className="play1";
+			document.getElementById("prod").src="includes/producer.png";
+			clearInterval(interval1);
+		}
+	}
+
+    return false;
+	}
+
+	function consumer(el) {
+	if(count == 0) {
+		alert("All items consumed");
+	} else {
+		if(el.className!="pause2")
+		{
+			el.src="includes/pause.png";
+			el.className="pause2";
+			document.getElementById("cons").src="includes/moneycoming.gif";
+			interval2 = setInterval(function(){
+				if(el.className!="play2") {
+				str="empty"+(start+1);
+				count--;
+				document.getElementById(str).src="includes/empty.png";
+				document.getElementById("count").innerHTML = "Counter : "+count;
+				start = (start+1)%8;
+				if(count==0)
+				{
+					clearInterval(interval2);
+					el.src='includes/play.png';
+					el.className="play2";
+					document.getElementById("cons").src="includes/consumer.png";
+					start = 0;
+					end = 0;
+					alert("All items consumed");
+				}
+				}
+			},1000);
+		}
+		else if(el.className=="pause2")
+		{
+			el.src='includes/play.png';
+			el.className="play2";
+			document.getElementById("cons").src="includes/consumer.png";
+			clearInterval(interval2);
+		}
+	}
+
+	return false;
+	}
+
+</script>
+
+</html>

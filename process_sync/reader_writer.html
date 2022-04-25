@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" style="min-height: 100vh">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+
+    <title>Hello, world!</title>
+    <style>
+      .box {
+        border: 5px solid #292341;
+        max-width: fit-content;
+      }
+      .box > * {
+        background-color: #98c1d9;
+        font-size: large;
+        padding: 1.2rem 1.8rem !important;
+        border-right: 5px solid #292341;
+      }
+      .box > *:last-child {
+        border: none;
+      }
+      #readerstatement,
+      #writerstatement {
+        min-height: 5rem;
+      }
+      button[type="button"] {
+        border-radius: 1000px;
+        background-color: #ee6c4d;
+        color: white;
+      }
+    </style>
+    <script src="reader_writer.js"></script>
+  </head>
+  <body class="vh-100 container-fluid bg-primary m-0">
+    <h1
+      class="text-center"
+      style="
+        height: 15%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      Reader-Writers Problem
+    </h1>
+    <div
+      class="d-flex flex-column justify-content-center align-items-center"
+      style="height: 82%"
+    >
+      <div
+        class="d-flex p-2 bd-highlight justify-content-center fs-2"
+        id="writerstatement"
+      ></div>
+      <div class="d-flex flex-row bd-highlight justify-content-center box">
+        <div class="p-2 bd-highlight" id="1">0</div>
+        <div class="p-2 bd-highlight" id="2">0</div>
+        <div class="p-2 bd-highlight" id="3">0</div>
+        <div class="p-2 bd-highlight" id="4">0</div>
+        <div class="p-2 bd-highlight" id="5">0</div>
+        <div class="p-2 bd-highlight" id="6">0</div>
+        <div class="p-2 bd-highlight" id="7">0</div>
+        <div class="p-2 bd-highlight" id="8">0</div>
+        <div class="p-2 bd-highlight" id="9">0</div>
+        <div class="p-2 bd-highlight" id="10">0</div>
+      </div>
+      <div
+        class="d-flex p-2 bd-highlight justify-content-center fs-2"
+        id="readerstatement"
+      ></div>
+      <div
+        id="buttons"
+        style="display: flex; align-items: center; padding: 1rem"
+      >
+        <button
+          type="button"
+          style="
+            padding: 0.2rem 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin: auto 2rem;
+          "
+          name="button"
+          id="writer"
+          onclick="writerAction(this)"
+          value="1"
+        >
+          writer
+        </button>
+        <button
+          type="button"
+          name="button"
+          style="
+            padding: 0.2rem 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin: auto 2rem;
+          "
+          id="reader"
+          onclick="readerAction(this)"
+          value="1"
+        >
+          reader
+        </button>
+        <button
+          type="button"
+          name="button"
+          style="
+            padding: 0.2rem 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin: auto 2rem;
+          "
+          id="stop"
+          onclick="stop()"
+        >
+          stop
+        </button>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
