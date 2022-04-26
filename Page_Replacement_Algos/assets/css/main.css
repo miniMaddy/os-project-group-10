@@ -26,9 +26,6 @@ section, summary, time, mark, audio, video {
 	vertical-align: baseline;
 }
 
-html:focus-within {
-	scroll-behavior: smooth;
-}
 table, th, td, tr {
 	text-align: center;
 	border: 1px solid black;
