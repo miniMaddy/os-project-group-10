@@ -65,13 +65,6 @@
         justify-content: center;
         font-family: monospace;
       }
-      #col {
-        display: flex;
-        flex-direction: column;
-        overflow-x: auto;
-        justify-content: center;
-        align-items: center;
-      }
       h1 {
         margin: 2rem auto;
       }
@@ -103,14 +96,21 @@
         font-size: 1.4rem;
         background-color: #2799d7;
       }
+      #col {
+        display: flex;
+        flex-direction: column;
+        overflow-x: auto;
+        justify-content: center;
+        align-items: center;
+      }
       #gantt,
       #timestamps {
         display: flex;
         min-width: 80%;
         max-width: 80%;
-        align-content: center;
         min-height: 3rem;
         max-height: 3rem;
+        overflow-x: auto;
       }
       .block {
         display: flex;
@@ -121,6 +121,9 @@
       #timestamps > .block {
         justify-content: end;
       }
+      #timestamps > .block:first-child {
+        justify-content: space-between;
+      }
       #buttons {
         display: flex;
         flex-direction: row;
@@ -128,11 +131,6 @@
       }
       #buttons button {
         margin: 7px;
-      }
-      #tq {
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
     </style>
   </head>
@@ -180,15 +178,10 @@
             "</fieldset>";
         }
         document.getElementById("process").innerHTML +=
-          "<div id ='buttons'><button type='button' onclick='calc(" +
+          "<div id ='buttons'><button type='submit' onclick='calc(" +
           n +
           ")'>Submit </button> <button type='reset' onclick = 'clear()'>Reset</button></div>";
       };
-
-      function check(fin, n) {
-        for (var i = 0; i < n; i++) if (fin[i] == false) return false;
-        return true;
-      }
 
       var calc = function (n) {
         let a = [];
@@ -204,10 +197,7 @@
           arr = [],
           wait = [],
           burst = [],
-          rem_time = [],
           tat = [];
-        let total_tat = 0,
-          total_wt = 0;
         let key = Array.from(Array(a.length).keys()).sort((i, j) =>
           parseInt(a[i][1].value) < parseInt(a[j][1].value)
             ? -1
@@ -225,68 +215,36 @@
         for (var i = 0, ct = 0; i < n; i++) {
           arr.push(parseInt(a[i][1].value));
           burst.push(parseInt(a[i][2].value));
-          rem_time.push(burst[i]);
         }
-        let min = Infinity,
-          smallest = 0,
-          prev = -1,
-          cont = true,
-          set = false,
-          index = 0;
-
-        document.getElementById("chart").innerHTML =
-          "<h1>Gantt Chart</h1><div id='col'><div id = 'gantt'></div><div id='timestamps'></div></div>";
-
-        for (let time = 0, count = 0; count != n; time++) {
-          for (let i = 0; i < n; i++) {
-            if (arr[i] <= time && rem_time[i] < min && rem_time[i] > 0) {
-              min = rem_time[i];
-              smallest = i;
-              cont = false;
+        cmp.push(burst[0] + arr[0]);
+        tat.push(cmp[0] - arr[0]);
+        wait.push(tat[0] - burst[0]);
+        for (let i = 0; i < n - 1; i++) {
+          cmp.push(Infinity);
+          tat.push(Infinity);
+          wait.push(Infinity);
+        }
+        let index;
+        for (var i = 1; i < n; i++) {
+          let min = burst[i];
+          for (let j = i; j < n; j++) {
+            if (arr[j] <= cmp[i - 1] && burst[j] <= min) {
+              min = burst[i];
+              index = j;
             }
           }
-          if (cont) continue;
-          if (!set) {
-            prev = smallest;
-            set = true;
-          }
-          if (prev != smallest && prev != -1 && rem_time[prev] > 0) {
-            document.getElementById(
-              "gantt"
-            ).innerHTML += `<div class='block' style="background-color: ${
-              colors[key[prev] % colors.length]
-            }; color: ${tc[key[prev] % tc.length]}; flex-grow: ${2}">${
-              key[prev] + 1
-            }</div>`;
-            document.getElementById(
-              "timestamps"
-            ).innerHTML += `<div class="block" style="flex-grow: ${2}"><div>${time}</div></div>`;
-          }
-          prev = smallest;
-          rem_time[smallest]--;
-          min = rem_time[smallest];
-          if (min == 0) min = Infinity;
-          if (rem_time[smallest] == 0) {
-            count++;
-            document.getElementById(
-              "gantt"
-            ).innerHTML += `<div class='block' style="background-color: ${
-              colors[key[smallest] % colors.length]
-            }; color: ${tc[key[smallest] % tc.length]}; flex-grow: ${2}">${
-              key[smallest] + 1
-            }</div>`;
-            document.getElementById(
-              "timestamps"
-            ).innerHTML += `<div class="block" style="flex-grow: ${2}"><div>${time}</div></div>`;
-            cont = true;
-            cmp[smallest] = time + 1;
-            tat[smallest] = cmp[smallest] - arr[smallest];
-            total_tat += tat[smallest];
-            wait[smallest] = tat[smallest] - burst[smallest];
-            total_wt += wait[smallest];
-          }
+          cmp[index] = cmp[i - 1] + burst[index];
+          tat[index] = cmp[index] - arr[index];
+          wait[index] = tat[index] - burst[index];
+          [key[i], key[index]] = [key[index], key[i]];
+          [arr[i], arr[index]] = [arr[index], arr[i]];
+          [burst[i], burst[index]] = [burst[index], burst[i]];
+          [tat[i], tat[index]] = [tat[index], tat[i]];
+          [wait[i], wait[index]] = [wait[index], wait[i]];
+          [cmp[i], cmp[index]] = [cmp[index], cmp[i]];
         }
-
+        let total_tat = 0,
+          total_wt = 0;
         document.getElementById("table").innerHTML =
           "<h1> Result </h1><table><thead><tr><th>Process</th><th>Arrival Time</th><th>Burst Time</th><th>Completion Time</th><th>Turn Around Time</th><th>Waiting Time</th></tr></thead><tbody></tbody></table>";
         for (let i = 0; i < n; i++) {
@@ -300,6 +258,25 @@
         for (let i = 0; i < n; i++) {
           total_tat += tat[i];
           total_wt += wait[i];
+        }
+        document.getElementById("chart").innerHTML =
+          "<h1>Gantt Chart</h1><div id='col'><div id = 'gantt'></div><div id='timestamps'></div></div>";
+        for (var i = 0; i < n; i++) {
+          document.getElementById(
+            "gantt"
+          ).innerHTML += `<div class='block' style="background-color: ${
+            colors[i % colors.length]
+          }; color: ${tc[i % tc.length]}; flex-grow: ${tat[i]}">${
+            key[i] + 1
+          }</div>`;
+          if (i == 0)
+            document.getElementById(
+              "timestamps"
+            ).innerHTML += `<div class="block" style="flex-grow: ${tat[i]}"><div>${arr[i]}</div><div style="justify-self: flex-end !important">${cmp[i]}</div></div>`;
+          else
+            document.getElementById(
+              "timestamps"
+            ).innerHTML += `<div class="block" style="flex-grow: ${tat[i]}"><div>${cmp[i]}</div></div>`;
         }
       };
     </script>

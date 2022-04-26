@@ -137,14 +137,14 @@
   <body>
     <nav></nav>
     <section>
-      <form id="input" action="#">
+      <form id="input">
         <div id="np">
           <label for="noOfProcesses"> Enter the number of processes </label>
           <div>
             <input type="number" id="noOfProcesses" max="50" min="0" required />
           </div>
         </div>
-        <button type="submit" onclick="displayInput()">Create</button>
+        <button type="button" onclick="displayInput()">Create</button>
       </form>
       <form id="process"></form>
       <div id="table"></div>
@@ -162,7 +162,7 @@
         if (n <= 0 || isNaN(n)) return;
         for (var i = 0; i < n; i++) {
           document.getElementById("process").innerHTML +=
-            '<fieldset class="processinfo" action="#"><div class="process' +
+            '<fieldset class="processinfo"><div class="process' +
             (i + 1) +
             '">Process ' +
             (i + 1) +
@@ -178,7 +178,7 @@
             "</fieldset>";
         }
         document.getElementById("process").innerHTML +=
-          "<div id ='buttons'><button type='submit' onclick='calc(" +
+          "<div id ='buttons'><button type='button' onclick='calc(" +
           n +
           ")'>Submit </button> <button type='reset' onclick = 'clear()'>Reset</button></div>";
       };
