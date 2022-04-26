@@ -197,4 +197,5 @@ button.clear:focus, button.submit:focus {
   height: 1em;
   background-image: url("./logo.svg");
   background-size: cover;
+  
 }

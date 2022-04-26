@@ -1,4 +1,44 @@
-const seek = (algo, range, points) => {
+const render = (algo, range, points) => {
+	if (window.myChart) {
+		window.myChart.destroy();
+	}
+	const data = {
+		labels: points.map(dot => ''),
+		datasets: [{
+			label: algo,
+			data: points,
+			backgroundColor: 'rgb(255, 99, 132)',
+			borderColor: 'rgb(255, 99, 132)'
+		}]
+	}
+	const options = {
+		scales: {
+			x: {
+				position: 'bottom',
+				title: {
+					display: true,
+					text: 'seek requests'
+				}
+			},
+			y: {
+				type: 'linear',
+				position: 'left',
+				min: 0,
+				suggestedMax: range,
+				title: {
+					display: true,
+					text: 'tracks positions'
+				}
+			}
+		}
+	};
+	const config = {
+		type: 'line',
+		data: data,
+		options: options
+	};
+	const ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
+	window.myChart = new Chart(ctx, config);
 	let seektime = 0;
 	let prev = points[0];
 	for (const track of points) {
@@ -6,9 +46,14 @@ const seek = (algo, range, points) => {
 		prev = track;
 	}
 	document.getElementById('output').innerHTML = `Seek time: ${seektime}`;
+	document.querySelector('.credits').classList.remove('hidden');
 }
 const clear = () => {
+	if (window.myChart) {
+		window.myChart.destroy();
+	}
 	document.getElementById('output').innerHTML = '';
+	document.querySelector('.credits').classList.add('hidden');
 }
 const validate = () => {
 	const inputs = document.querySelectorAll('input[type="number"]');
@@ -120,7 +165,7 @@ const run = () => {
 	const seq = algofn[algo.id]();
 	if (seq) {
 		const range = parseInt(document.querySelector('input[type="number"]').value);
-		seek(algo.value, range, seq);
+		render(algo.value, range, seq);
 	}
 }
 
